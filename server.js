@@ -5,7 +5,6 @@ const LocalStrategy = require('passport-local').Strategy;
 const pgSession = require('connect-pg-simple')(session);
 const pg = require('pg');
 const bodyParser = require('body-parser')
-const crypto = require('crypto');
 const dotenv = require('dotenv').config();
 const cors = require('cors');
 const bcrypt = require('bcrypt');
