@@ -26,9 +26,9 @@ const pool = new pg.Pool({
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests from any origin
-    if(origin==="https://e-commerce-ep2l.onrender.com"){
+    // if(origin==="https://e-commerce-ep2l.onrender.com"){
       callback(null, true);
-    }
+    // }
   }, // Allow requests from this origin
   credentials: true // Allow sending cookies
 }));
