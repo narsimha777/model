@@ -41,6 +41,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie:{
+    domain: 'https://e-commerce-rest-api-afg8.onrender.com',
     maxAge: 24*60*60*1000,
     httpOnly: true
   }
