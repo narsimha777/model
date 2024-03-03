@@ -44,7 +44,7 @@ app.use(session({
   saveUninitialized: false,
   cookie:{
     maxAge: 24*60*60*1000,
-    domain:".render.com",
+    // domain:".render.com",
     // sameSite: 'none',
     // secure: true,
     httpOnly: true
