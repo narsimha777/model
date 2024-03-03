@@ -40,12 +40,12 @@ app.use(session({
     tableName: 'session',
   }),
   secret: "iopjkl1234",
-  resave: false,
-  saveUninitialized: false,
+  resave: true,
+  saveUninitialized: true,
   cookie:{
     maxAge: 24*60*60*1000,
-    domain:".render.com",
-    sameSite:"none",
+    // domain:".render.com",
+    sameSite: 'none',
     secure: true,
     httpOnly: true
   }
