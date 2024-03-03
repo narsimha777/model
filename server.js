@@ -46,7 +46,6 @@ app.use(session({
     maxAge: 24*60*60*1000,
     domain:".onrender.com",
     sameSite:"strict",
-    secure:true,
     httpOnly: true
   }
 }));
