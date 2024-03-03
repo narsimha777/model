@@ -40,7 +40,7 @@ app.use(session({
     tableName: 'session',
   }),
   secret: "iopjkl1234",
-  resave: true,
+  resave: false,
   saveUninitialized: false,
   cookie:{
     maxAge: 24*60*60*1000,
