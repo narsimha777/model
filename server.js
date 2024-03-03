@@ -41,7 +41,7 @@ app.use(session({
   }),
   secret: "iopjkl1234",
   resave: true,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie:{
     maxAge: 24*60*60*1000,
     // domain:".render.com",
