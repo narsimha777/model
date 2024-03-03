@@ -45,7 +45,7 @@ app.use(session({
   cookie:{
     maxAge: 24*60*60*1000,
     domain:".onrender.com",
-    sameSite:"none",
+    sameSite:"strict",
     secure:true,
     httpOnly: true
   }
