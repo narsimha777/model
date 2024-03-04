@@ -9,7 +9,7 @@ const dotenv = require('dotenv').config();
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
-const cookieSession = require('cookie-session');
+const jwt = require('jsonwebtoken');
 // const { sign } = require('jsonwebtoken')
 
 const app = express();
@@ -63,15 +63,21 @@ app.use(cors({
       // }
     }, // Allow requests from this origin
     credentials: true // Allow sending cookies
-  }));
-  // const isAuth =(req, res, next)=>{
-    //   if(req.session.isAuth){
-      //     next();
-      //   }else{
-        //     res.json({message:"Please login"});
-        //   }
-        // }
-        
+}));
+
+const secretKey = 'iopjkl123';
+
+function authenticateToken(req, res, next) {
+  const token = req.headers['authorization'];
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, secretKey, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+}
+
 // Initialize Passport
 app.use(passport.initialize());
 app.use(passport.session());
@@ -135,7 +141,8 @@ app.post('/login', async (req, res, next) => {
               return next(loginErr);
           }
           if (req.isAuthenticated()) {
-           return res.json({message:"Authentication done", user: req.user});;
+            const token = jwt.sign({id: req.user.user_id, username: req.user.user_name}, secretKey, {expiresIn: '24h'});
+            return res.json({user: req.user , token: token, message:"Authentication done"});
           } else {
               return res.status(200).json({ message: "Authentication failed" });
           }
@@ -166,14 +173,15 @@ app.post('/signup', async (req, res, next) => {
       if (err) {
         return next(err);
       }
-      return res.status(200).json({ message: 'Registration successful', user: req.user });
+      const token = jwt.sign({id: req.user.user_id, username: req.user.user_name}, secretKey, {expiresIn: '24h'});
+      return res.status(200).json({ message: 'Registration successful', user: req.user, token:token});
     });
   } catch (error) {
     return next(error);
   }
 });
 
-app.get('/cart/:id', async (req, res) => {
+app.get('/cart/:id', authenticateToken, async (req, res) => {
   // if(req.isAuthenticated()){
     const userId = req.params.id;
     const result = await pool.query('SELECT cart.count, cart.user_id, products.product_img, products.product_name, products.product_id, products.price FROM cart JOIN products ON cart.product_id = products.product_id WHERE cart.user_id = $1;', [userId]);
@@ -188,7 +196,7 @@ app.get('/cart/:id', async (req, res) => {
   // }
 });
 
-app.post('/cart/inc/:id', async (req, res) => {
+app.post('/cart/inc/:id', authenticateToken, async (req, res) => {
   try {
     // if(req.isAuthenticated()){
       const user_id = req.params.id; 
@@ -205,7 +213,7 @@ app.post('/cart/inc/:id', async (req, res) => {
   }
 });
 
-app.post('/cart/dec/:id', async (req, res) => {
+app.post('/cart/dec/:id', authenticateToken, async (req, res) => {
   try {
     // if(req.isAuthenticated()){
       const user_id = req.params.id; 
@@ -260,7 +268,7 @@ app.get('/category', async(req, res)=>{
 //   res.status(200).send("data sent");
 // })
 
-app.post('/cart', async (req, res) => {
+app.post('/cart', authenticateToken, async (req, res) => {
   // if(req.isAuthenticated()){
   const { id, product_id } = req.body;
   try {
