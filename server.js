@@ -25,34 +25,34 @@ const pool = new pg.Pool({
 
 // app.use(cors(corsOptions));
 // Configure session
-// app.use(session({
-//   store: new pgSession({
-//     pool: pool, 
-//     tableName: 'session',
-//   }),
-//   secret: "iopjkl1234",
-//   resave: false,
-//   saveUninitialized: false,
-//   cookie:{
-//     maxAge: 24*60*60*1000,
-//     httpOnly: true,
-//     // domain:".onrender.com",
-//     sameSite: 'none',
-//     secure: true
-//   }
-// }));
-
-app.use(cookieSession({
+app.use(session({
   store: new pgSession({
     pool: pool, 
     tableName: 'session',
   }),
-  maxAge:24*60*60*1000,
-  keys:['iopjkl123'],
-  httpOnly: true,
-  sameSite:true,
-  secure: true
-}))
+  secret: "iopjkl1234",
+  resave: false,
+  saveUninitialized: false,
+  cookie:{
+    maxAge: 24*60*60*1000,
+    httpOnly: true,
+    // domain:".onrender.com",
+    sameSite: 'none',
+    // secure: true
+  }
+}));
+
+// app.use(cookieSession({
+//   store: new pgSession({
+//     pool: pool, 
+//     tableName: 'session',
+//   }),
+//   maxAge:24*60*60*1000,
+//   keys:['iopjkl123'],
+//   httpOnly: true,
+//   sameSite:true,
+//   secure: true
+// }))
 
 app.use(cookieParser());
 app.use(cors({
