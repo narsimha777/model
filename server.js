@@ -24,27 +24,24 @@ const pool = new pg.Pool({
 
 // app.use(cors(corsOptions));
 // Configure session
-// app.use(session({
-//   store: new pgSession({
-//     pool: pool, 
-//     tableName: 'session',
-//   }),
-//   secret: "iopjkl1234",
-//   resave: false,
-//   saveUninitialized: false,
-//   cookie:{
-//     secure: true
-//   }
-// }));
-
 app.use(session({
-  secret: 'keyboard cat',
+  store: new pgSession({
+    pool: pool, 
+    tableName: 'session',
+  }),
+  secret: "iopjkl1234",
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: true }
+  cookie:{
+    maxAge: 24*60*60*1000,
+    httpOnly: true,
+    // domain:".onrender.com",
+    sameSite: 'none',
+    // secure: true
+  }
 }));
 
-// app.use(cookieParser());
+app.use(cookieParser());
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests from any origin
@@ -62,10 +59,10 @@ app.use(cors({
         //   }
         // }
         
-        // Initialize Passport
-        app.use(passport.initialize());
-        app.use(passport.session());
-        app.use(bodyParser.json());
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(bodyParser.json());
 
 // Configure Passport with a local strategy
 passport.use(new LocalStrategy(
@@ -125,7 +122,7 @@ app.post('/login', async (req, res, next) => {
               return next(loginErr);
           }
           if (req.isAuthenticated()) {
-              return res.json({message:"Authentication done", user: req.user});;
+           return res.json({message:"Authentication done", user: req.user});;
           } else {
               return res.status(200).json({ message: "Authentication failed" });
           }
