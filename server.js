@@ -23,7 +23,7 @@ const pool = new pg.Pool({
 });
 
 // app.use(cors(corsOptions));
-app.use(passport.initialize());
+// app.use(passport.initialize());
 // Configure session
 app.use(session({
   store: new pgSession({
@@ -33,13 +33,13 @@ app.use(session({
   secret: "iopjkl1234",
   resave: false,
   saveUninitialized: false,
-  // cookie:{
-  //   maxAge: 24*60*60*1000,
-  //   httpOnly: true,
-    // domain:".onrender.com",
-    // sameSite: 'none',
+  cookie:{
+    maxAge: 24*60*60*1000,
+    httpOnly: true,
+    domain:".onrender.com",
+    sameSite: 'none',
     // secure: true
-  // }
+  }
 }));
 
 // app.use(cookieParser());
@@ -61,7 +61,7 @@ app.use(cors({
       // }
       
 // Initialize Passport
-app.use(passport.session({cookie:{maxAge: 24*60*60*1000, secure:true, sameSite:"none"}}));
+app.use(passport.session());
 app.use(bodyParser.json());
 
 // Configure Passport with a local strategy
