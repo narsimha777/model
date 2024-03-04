@@ -25,17 +25,6 @@ const pool = new pg.Pool({
 // app.use(cors(corsOptions));
 // Configure session
 app.use(cookieParser());
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests from any origin
-    // if(origin==="https://e-commerce-ep2l.onrender.com"){
-      callback(null, true);
-    // }
-  }, // Allow requests from this origin
-  credentials: true // Allow sending cookies
-}));
 app.use(session({
   store: new pgSession({
     pool: pool, 
@@ -53,15 +42,26 @@ app.use(session({
   }
 }));
 
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests from any origin
+    // if(origin==="https://e-commerce-ep2l.onrender.com"){
+      callback(null, true);
+    // }
+  }, // Allow requests from this origin
+  credentials: true // Allow sending cookies
+}));
 // const isAuth =(req, res, next)=>{
-//   if(req.session.isAuth){
-//     next();
-//   }else{
-//     res.json({message:"Please login"});
-//   }
-// }
-
+  //   if(req.session.isAuth){
+    //     next();
+    //   }else{
+      //     res.json({message:"Please login"});
+      //   }
+      // }
+      
 // Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(bodyParser.json());
 
 // Configure Passport with a local strategy
