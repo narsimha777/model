@@ -199,10 +199,10 @@ app.post('/cart/inc/:id', async (req, res) => {
       } else {
           res.status(401).json({ message: 'Error occurred' }); 
       }
+  // }
+ }catch (err) {
+      console.log(err);
   }
-//  }catch (err) {
-//       console.log(err);
-//   }
 });
 
 app.post('/cart/dec/:id', async (req, res) => {
@@ -221,10 +221,10 @@ app.post('/cart/dec/:id', async (req, res) => {
       } else {
           res.status(401).json({ message: 'Error occurred' }); 
       }
+  // }
+} catch (err) {
+      console.log(err);
   }
-// } catch (err) {
-//       console.log(err);
-//   }
 });
 
 
