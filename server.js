@@ -23,23 +23,25 @@ const pool = new pg.Pool({
 });
 
 // app.use(cors(corsOptions));
-// app.use(passport.initialize());
 // Configure session
+// app.use(session({
+//   store: new pgSession({
+//     pool: pool, 
+//     tableName: 'session',
+//   }),
+//   secret: "iopjkl1234",
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie:{
+//     secure: true
+//   }
+// }));
+
 app.use(session({
-  store: new pgSession({
-    pool: pool, 
-    tableName: 'session',
-  }),
-  secret: "iopjkl1234",
+  secret: 'keyboard cat',
   resave: false,
   saveUninitialized: false,
-  cookie:{
-    maxAge: 24*60*60*1000,
-    httpOnly: true,
-    domain:".onrender.com",
-    sameSite: 'none',
-    // secure: true
-  }
+  cookie: { secure: true }
 }));
 
 // app.use(cookieParser());
@@ -48,21 +50,22 @@ app.use(cors({
     // Allow requests from any origin
     // if(origin==="https://e-commerce-ep2l.onrender.com"){
       callback(null, true);
-    // }
-  }, // Allow requests from this origin
-  credentials: true // Allow sending cookies
-}));
-// const isAuth =(req, res, next)=>{
-  //   if(req.session.isAuth){
-    //     next();
-    //   }else{
-      //     res.json({message:"Please login"});
-      //   }
       // }
-      
-// Initialize Passport
-app.use(passport.session());
-app.use(bodyParser.json());
+    }, // Allow requests from this origin
+    credentials: true // Allow sending cookies
+  }));
+  // const isAuth =(req, res, next)=>{
+    //   if(req.session.isAuth){
+      //     next();
+      //   }else{
+        //     res.json({message:"Please login"});
+        //   }
+        // }
+        
+        // Initialize Passport
+        app.use(passport.initialize());
+        app.use(passport.session());
+        app.use(bodyParser.json());
 
 // Configure Passport with a local strategy
 passport.use(new LocalStrategy(
