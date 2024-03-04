@@ -36,8 +36,8 @@ app.use(session({
     maxAge: 24*60*60*1000,
     httpOnly: true,
     // domain:".onrender.com",
-    sameSite: 'none',
-    secure: true
+    // sameSite: 'none',
+    // secure: true
   }
 }));
 
@@ -61,7 +61,7 @@ app.use(cors({
       
 // Initialize Passport
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.session({cookie:{secure:true, sameSite:"none"}}));
 app.use(bodyParser.json());
 
 // Configure Passport with a local strategy
