@@ -25,6 +25,8 @@ const pool = new pg.Pool({
 // app.use(cors(corsOptions));
 // Configure session
 app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests from any origin
@@ -60,8 +62,6 @@ app.use(session({
 // }
 
 // Initialize Passport
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(bodyParser.json());
 
 // Configure Passport with a local strategy
