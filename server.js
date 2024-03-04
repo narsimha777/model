@@ -24,7 +24,7 @@ const pool = new pg.Pool({
 
 // app.use(cors(corsOptions));
 // Configure session
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(session({
   store: new pgSession({
     pool: pool, 
@@ -34,8 +34,8 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie:{
-    // secure: true,
-    // sameSite: 'none',
+    secure: true,
+    sameSite: 'none',
     maxAge: 24*60*60*1000,
     // domain:".render.com",
     httpOnly: true
