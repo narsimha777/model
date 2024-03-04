@@ -38,7 +38,7 @@ app.use(session({
     httpOnly: true,
     // domain:".onrender.com",
     sameSite: 'none',
-    // secure: true
+    secure: true
   }
 }));
 
