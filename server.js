@@ -33,13 +33,13 @@ app.use(session({
   secret: "iopjkl1234",
   resave: false,
   saveUninitialized: false,
-  // cookie:{
-  //   // secure: true,
+  cookie:{
+    secure: true,
   //   // sameSite: 'none',
     // maxAge: 24*60*60*1000,
   //   // domain:".render.com",
-  //   httpOnly: true
-  // }
+    httpOnly: true
+  }
 }));
 
 const isAuthenticated = (req, res, next) => {
@@ -71,7 +71,7 @@ app.use(cors({
 
 // Initialize Passport
 app.use(passport.initialize());
-app.use(passport.session({cookie:{maxAge: 24*60*60*1000, sameSite:"none", httpOnly:true, secure:true}}));
+app.use(passport.session());
 app.use(bodyParser.json());
 
 // Configure Passport with a local strategy
