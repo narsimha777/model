@@ -24,7 +24,16 @@ const pool = new pg.Pool({
 
 // app.use(cors(corsOptions));
 // Configure session
-// app.use(cookieParser());
+app.use(cookieParser());
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests from any origin
+    // if(origin==="https://e-commerce-ep2l.onrender.com"){
+      callback(null, true);
+    // }
+  }, // Allow requests from this origin
+  credentials: true // Allow sending cookies
+}));
 app.use(session({
   store: new pgSession({
     pool: pool, 
@@ -37,20 +46,10 @@ app.use(session({
     secure: true,
     sameSite: 'none',
     maxAge: 24*60*60*1000,
-  //   // domain:".render.com",
+    domain:".onrender.com",
     httpOnly: true
   }
 }));
-
-// const isAuthenticated = (req, res, next) => {
-//   if (req.cookies && req.cookies.user_id) {
-//     // User is authenticated
-//     return next();
-//   } else {
-//     // User is not authenticated
-//     return res.status(401).json({ message: "Authentication required" });
-//   }
-// };
 
 // const isAuth =(req, res, next)=>{
 //   if(req.session.isAuth){
@@ -59,15 +58,6 @@ app.use(session({
 //     res.json({message:"Please login"});
 //   }
 // }
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests from any origin
-    // if(origin==="https://e-commerce-ep2l.onrender.com"){
-      callback(null, true);
-    // }
-  }, // Allow requests from this origin
-  credentials: true // Allow sending cookies
-}));
 
 // Initialize Passport
 app.use(passport.initialize());
@@ -132,8 +122,6 @@ app.post('/login', async (req, res, next) => {
               return next(loginErr);
           }
           if (req.isAuthenticated()) {
-              // req.session.isAuth = true;
-              // res.cookie('user_id', user.user_id, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true , secure: true, sameSite: 'none'});
               return res.json({message:"Authentication done", user: req.user});;
           } else {
               return res.status(200).json({ message: "Authentication failed" });
