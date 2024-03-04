@@ -34,7 +34,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie:{
-    secure: false,
+    secure: true,
     sameSite: 'none',
     maxAge: 24*60*60*1000,
     // domain:".render.com",
@@ -42,15 +42,15 @@ app.use(session({
   }
 }));
 
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests from any origin
-    // if(origin==="https://e-commerce-ep2l.onrender.com"){
-      callback(null, true);
-    // }
-  }, // Allow requests from this origin
-  credentials: true // Allow sending cookies
-}));
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     // Allow requests from any origin
+//     // if(origin==="https://e-commerce-ep2l.onrender.com"){
+//       callback(null, true);
+//     // }
+//   }, // Allow requests from this origin
+//   credentials: true // Allow sending cookies
+// }));
 
 // Initialize Passport
 app.use(passport.initialize());
