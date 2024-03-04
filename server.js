@@ -43,7 +43,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie:{
-    secure: true,
+    // secure: true,
     sameSite: 'none',
     maxAge: 24*60*60*1000,
     // domain:".onrender.com",
