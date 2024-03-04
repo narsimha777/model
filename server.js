@@ -24,7 +24,6 @@ const pool = new pg.Pool({
 
 // app.use(cors(corsOptions));
 // Configure session
-app.use(cookieParser());
 app.use(session({
   store: new pgSession({
     pool: pool, 
@@ -42,6 +41,7 @@ app.use(session({
   }
 }));
 
+app.use(cookieParser());
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests from any origin
