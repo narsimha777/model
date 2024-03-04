@@ -41,7 +41,7 @@ app.use(session({
   }
 }));
 
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests from any origin
