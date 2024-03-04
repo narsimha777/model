@@ -43,6 +43,10 @@ const pool = new pg.Pool({
 // }));
 
 app.use(cookieSession({
+  store: new pgSession({
+    pool: pool, 
+    tableName: 'session',
+  }),
   maxAge:24*60*60*1000,
   keys:['iopjkl123'],
   httpOnly: true,
