@@ -23,6 +23,7 @@ const pool = new pg.Pool({
 });
 
 // app.use(cors(corsOptions));
+app.use(passport.initialize());
 // Configure session
 app.use(session({
   store: new pgSession({
@@ -60,7 +61,6 @@ app.use(cors({
       // }
       
 // Initialize Passport
-app.use(passport.initialize());
 app.use(passport.session({cookie:{secure:true, sameSite:"none"}}));
 app.use(bodyParser.json());
 
