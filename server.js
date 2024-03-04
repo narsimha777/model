@@ -9,6 +9,7 @@ const dotenv = require('dotenv').config();
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 // const { sign } = require('jsonwebtoken')
 
 const app = express();
@@ -24,22 +25,30 @@ const pool = new pg.Pool({
 
 // app.use(cors(corsOptions));
 // Configure session
-app.use(session({
-  store: new pgSession({
-    pool: pool, 
-    tableName: 'session',
-  }),
-  secret: "iopjkl1234",
-  resave: false,
-  saveUninitialized: false,
-  cookie:{
-    maxAge: 24*60*60*1000,
-    httpOnly: true,
-    // domain:".onrender.com",
-    sameSite: 'none',
-    secure: true
-  }
-}));
+// app.use(session({
+//   store: new pgSession({
+//     pool: pool, 
+//     tableName: 'session',
+//   }),
+//   secret: "iopjkl1234",
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie:{
+//     maxAge: 24*60*60*1000,
+//     httpOnly: true,
+//     // domain:".onrender.com",
+//     sameSite: 'none',
+//     secure: true
+//   }
+// }));
+
+app.use(cookieSession({
+  maxAge:24*60*60*1000,
+  keys:['iopjkl123'],
+  httpOnly: true,
+  sameSite:true,
+  secure: true
+}))
 
 app.use(cookieParser());
 app.use(cors({
