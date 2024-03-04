@@ -35,22 +35,22 @@ app.use(session({
   saveUninitialized: false,
   cookie:{
     secure: true,
-    // sameSite: 'none',
+    sameSite: 'none',
     maxAge: 24*60*60*1000,
   //   // domain:".render.com",
     httpOnly: true
   }
 }));
 
-const isAuthenticated = (req, res, next) => {
-  if (req.cookies && req.cookies.user_id) {
-    // User is authenticated
-    return next();
-  } else {
-    // User is not authenticated
-    return res.status(401).json({ message: "Authentication required" });
-  }
-};
+// const isAuthenticated = (req, res, next) => {
+//   if (req.cookies && req.cookies.user_id) {
+//     // User is authenticated
+//     return next();
+//   } else {
+//     // User is not authenticated
+//     return res.status(401).json({ message: "Authentication required" });
+//   }
+// };
 
 // const isAuth =(req, res, next)=>{
 //   if(req.session.isAuth){
@@ -133,7 +133,7 @@ app.post('/login', async (req, res, next) => {
           }
           if (req.isAuthenticated()) {
               // req.session.isAuth = true;
-              res.cookie('user_id', user.user_id, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true , secure: true, sameSite: 'none'});
+              // res.cookie('user_id', user.user_id, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true , secure: true, sameSite: 'none'});
               return res.json({message:"Authentication done", user: req.user});;
           } else {
               return res.status(200).json({ message: "Authentication failed" });
@@ -172,8 +172,8 @@ app.post('/signup', async (req, res, next) => {
   }
 });
 
-app.get('/cart/:id', isAuthenticated, async (req, res) => {
-  // if(req.isAuthenticated()){
+app.get('/cart/:id', async (req, res) => {
+  if(req.isAuthenticated()){
     const userId = req.params.id;
     const result = await pool.query('SELECT cart.count, cart.user_id, products.product_img, products.product_name, products.product_id, products.price FROM cart JOIN products ON cart.product_id = products.product_id WHERE cart.user_id = $1;', [userId]);
 
@@ -182,9 +182,9 @@ app.get('/cart/:id', isAuthenticated, async (req, res) => {
     } else {
       res.status(200).json(result.rows);
     }
-  // }else{
-  //   res.status(401).json({message:"Please Login"})
-  // }
+  }else{
+    res.status(401).json({message:"Please Login"})
+  }
 });
 
 app.post('/cart/inc/:id', async (req, res) => {
