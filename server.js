@@ -23,15 +23,6 @@ const pool = new pg.Pool({
 });
 
 // app.use(cors(corsOptions));
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests from any origin
-    // if(origin==="https://e-commerce-ep2l.onrender.com"){
-      callback(null, true);
-    // }
-  }, // Allow requests from this origin
-  credentials: true // Allow sending cookies
-}));
 // Configure session
 app.use(cookieParser());
 app.use(session({
@@ -43,12 +34,22 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie:{
-    // secure: true,
-    sameSite: 'strict',
+    secure: true,
+    sameSite: 'none',
     maxAge: 24*60*60*1000,
     // domain:".render.com",
     httpOnly: true
   }
+}));
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests from any origin
+    // if(origin==="https://e-commerce-ep2l.onrender.com"){
+      callback(null, true);
+    // }
+  }, // Allow requests from this origin
+  credentials: true // Allow sending cookies
 }));
 
 // Initialize Passport
