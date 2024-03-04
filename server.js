@@ -133,7 +133,7 @@ app.post('/login', async (req, res, next) => {
           }
           if (req.isAuthenticated()) {
               // req.session.isAuth = true;
-              res.cookie('user_id', user.user_id, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+              res.cookie('user_id', user.user_id, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true , secure: true, sameSite: 'none'});
               return res.json({message:"Authentication done", user: req.user});;
           } else {
               return res.status(200).json({ message: "Authentication failed" });
