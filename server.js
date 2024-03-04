@@ -33,22 +33,22 @@ app.use(session({
   secret: "iopjkl1234",
   resave: false,
   saveUninitialized: false,
-  // cookie:{
-  //   // secure: true,
-  //   // sameSite: 'none',
-  //   maxAge: 24*60*60*1000,
-  //   // domain:".render.com",
-  //   httpOnly: true
-  // }
+  cookie:{
+    // secure: true,
+    // sameSite: 'none',
+    maxAge: 24*60*60*1000,
+    // domain:".render.com",
+    httpOnly: true
+  }
 }));
 
-const isAuth =(req, res, next)=>{
-  if(req.session.isAuth){
-    next();
-  }else{
-    res.json({message:"Please login"});
-  }
-}
+// const isAuth =(req, res, next)=>{
+//   if(req.session.isAuth){
+//     next();
+//   }else{
+//     res.json({message:"Please login"});
+//   }
+// }
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests from any origin
@@ -122,7 +122,7 @@ app.post('/login', async (req, res, next) => {
               return next(loginErr);
           }
           if (req.isAuthenticated()) {
-              req.session.isAuth = true;
+              // req.session.isAuth = true;
               return res.json({message:"Authentication done", user: req.user});;
           } else {
               return res.status(200).json({ message: "Authentication failed" });
@@ -161,8 +161,8 @@ app.post('/signup', async (req, res, next) => {
   }
 });
 
-app.get('/cart/:id', isAuth, async (req, res) => {
-  // if(req.isAuthenticated()){
+app.get('/cart/:id', async (req, res) => {
+  if(req.isAuthenticated()){
     const userId = req.params.id;
     const result = await pool.query('SELECT cart.count, cart.user_id, products.product_img, products.product_name, products.product_id, products.price FROM cart JOIN products ON cart.product_id = products.product_id WHERE cart.user_id = $1;', [userId]);
 
@@ -171,31 +171,31 @@ app.get('/cart/:id', isAuth, async (req, res) => {
     } else {
       res.status(200).json(result.rows);
     }
-  // }else{
-  //   res.status(401).json({message:"Please Login"})
-  // }
+  }else{
+    res.status(401).json({message:"Please Login"})
+  }
 });
 
-app.post('/cart/inc/:id', isAuth, async (req, res) => {
+app.post('/cart/inc/:id', async (req, res) => {
   try {
-    // if(req.isAuthenticated()){
+    if(req.isAuthenticated()){
       const user_id = req.params.id; 
       const { product_id } = req.body;
       const result = await pool.query('UPDATE cart SET count = count + 1 WHERE user_id = $1 AND product_id = $2', [user_id, product_id]);
       if (result.rowCount === 1) {
           res.status(200).json({ message: 'Value incremented' }); 
-      // } else {
-      //     res.status(401).json({ message: 'Error occurred' }); 
-      // }
+      } else {
+          res.status(401).json({ message: 'Error occurred' }); 
+      }
   }
  }catch (err) {
       console.log(err);
   }
 });
 
-app.post('/cart/dec/:id', isAuth, async (req, res) => {
+app.post('/cart/dec/:id', async (req, res) => {
   try {
-    // if(req.isAuthenticated()){
+    if(req.isAuthenticated()){
       const user_id = req.params.id; 
       const { product_id } = req.body;
       const result = await pool.query('UPDATE cart SET count = count - 1 WHERE user_id = $1 AND product_id = $2', [user_id, product_id]);
@@ -206,9 +206,9 @@ app.post('/cart/dec/:id', isAuth, async (req, res) => {
           res.status(200).json({message:'Item removed'});
         }
           res.status(200).json({ message: 'Value decremented'}); 
-      // } else {
-      //     res.status(401).json({ message: 'Error occurred' }); 
-      // }
+      } else {
+          res.status(401).json({ message: 'Error occurred' }); 
+      }
   }
 } catch (err) {
       console.log(err);
@@ -249,7 +249,7 @@ app.get('/category', async(req, res)=>{
 // })
 
 app.post('/cart', async (req, res) => {
-  // if(req.isAuthenticated()){
+  if(req.isAuthenticated()){
   const { id, product_id } = req.body;
   try {
       // Check if the item already exists in the cart
@@ -279,9 +279,9 @@ app.post('/cart', async (req, res) => {
       console.error("Error adding to cart:", error);
       res.status(500).json({ message: "Internal server error" });
   }
-//  }else{
-//   res.status(401).json({message:"Please Login"})
-// }
+ }else{
+  res.status(401).json({message:"Please Login"})
+}
 });
 
 app.get('/products', async(req, res)=>{
